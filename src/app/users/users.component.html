@@ -1,0 +1,194 @@
+<div class="container" style="padding-top: 30px;">
+	<div class="row">
+	<div class="col-9 col-md-9">
+		<h1>List of users</h1>
+	</div>
+	<div class="col-md-3 col-3 align-right">
+		<button type="button" mdbBtn  gradient="aqua" rounded="true" class="relative waves-light" mdbWavesEffect rounded="true" data-toggle="modal" data-target="#addUser" (click)="resetForm();addUserModal.show()" mdbWavesEffect><mdb-icon fas icon="plus" class="mr-1"></mdb-icon>Add user</button>
+	</div>
+	</div>
+	<div class="row">
+	  <div class="col-md-12 col-12 mx-auto">
+		<div class="md-form">
+		  <input type="text" [(ngModel)]="searchText" class="form-control" id="search" mdbInput>
+		  <label for="search">Search</label>
+		</div>
+	  </div>
+  </div>
+	<table mdbTable class="table"  #tableUsers="mdbTable" >
+		<thead class="thead-light">
+			<tr>
+				<th>User name</th>
+				<th>Policy</th>
+				<th>Status</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody *ngIf="(users | json) != ({} | json)">
+			<tr mdbTableCol *ngFor="let key of objectKeys(users); let i = index" [ngClass]="users[key][objectKeys(users[key])].status == 'disabled' ? 'table-secondary' : 'none' && !users[key][objectKeys(users[key])].policyName ? 'table-warning' : 'none' ">
+				<td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"><strong>{{objectKeys(users[key])}}</strong></td>
+				<td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"><span *ngIf="objectValues(users[key])[0].policyName">{{objectValues(users[key])[0].policyName}}</span></td>
+				<td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
+					<div class="custom-control custom-switch">
+						<input type="checkbox" class="custom-control-input" id="customSwitch{{objectKeys(users[key])}}" [ngModel]="usersRaw[objectKeys(users[key])].status == 'enabled' ? true : null" (click)="setStatusUser(objectKeys(users[key]),usersRaw[objectKeys(users[key])].status)">
+					  <label mdbTooltip="Enable or Disable User" placement="top" class="custom-control-label" for="customSwitch{{objectKeys(users[key])}}">&nbsp;{{objectValues(users[key])[0].status}}</label>
+					</div>
+				</td>
+				<td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
+					<a mdbTooltip="Remove User" placement="top" class="action-link" (click)="deleteUserPrepare(objectKeys(users[key])); deleteApproveModal.show()"><mdb-icon fas icon="trash-alt" size="1x" class="red-text pr-1" aria-hidden="true"></mdb-icon></a><span class="pr-1">&nbsp;</span>
+		  		<a mdbTooltip="Edit User" placement="top" class="action-link" (click)="updateUserFrom();updateUserPrepare(objectKeys(users[key])); updateApproveModal.show()"><mdb-icon fas icon="pencil-alt" size="1x" class="red-text pr-1" aria-hidden="true"></mdb-icon></a>
+				</td>
+			</tr>
+		</tbody>
+	<tfoot class="grey lighten-5 w-100">
+		<tr>
+			<td colspan="4">
+				<mdb-table-pagination [tableEl]="tableUsers" [searchDataSource]="users"></mdb-table-pagination>
+			</td>
+	  </tr>
+	</tfoot>
+	</table>
+</div>
+<br/>
+<br/>
+<!-- delete approve modal -->
+
+<div mdbModal #deleteApproveModal="mdbModal" class="modal fade right" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+   aria-hidden="true" [config]='{backdrop: true, ignoreBackdropClick: true}'>
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close pull-right" aria-label="Close" (click)="deleteApproveModal.hide()">
+					<span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title w-100" id="myModalLabel">Remove User</h4>
+			</div>
+			<div class="modal-body">
+				Are you shure? <br/> After you click on <strong>"Delete"</strong> button user <strong>{{userToDelete}}</strong> will be removed.
+			</div>
+			<div class="modal-footer justify-content-center">
+				<button type="button" mdbBtn color="success" class="waves-light" aria-label="Close" (click)="deleteApproveModal.hide()" mdbWavesEffect>Cancel</button>
+				<button type="button" mdbBtn color="danger" class="relative waves-light" mdbWavesEffect (click)="deleteUser(); deleteApproveModal.hide()">Delete</button>
+			</div>
+		</div>
+	</div >
+</div >
+
+<!-- update approve modal -->
+
+<div mdbModal #updateApproveModal="mdbModal" class="modal fade right" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+   aria-hidden="true" [config]='{backdrop: true, ignoreBackdropClick: true}'>
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close pull-right" aria-label="Close" (click)="updateApproveModal.hide()">
+					<span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title w-100" id="myModalLabel">Edit User</h4>
+			</div>
+			<div class="modal-body">
+				<div class="md-form mb-5">
+					<input type="text" id="Update-access" class="form-control" [formControl]="accessKeyUpdate"
+						 mdbInput mdbValidate>
+					<label for="Update-access">Access Key (View Only)</label>
+				</div>
+
+				<div class="md-form mb-4">
+					<input type="text" id="Update-secret" class="form-control" [formControl]="secretKeyUpdate"
+						 mdbInput mdbValidate>
+					<label for="Update-secret">Secret key (leave blank if you don't want to change it)</label>
+					<mdb-error
+					*ngIf="secretKeyUpdate.invalid && (secretKeyUpdate.dirty || secretKeyUpdate.touched)">
+					Input invalid
+					</mdb-error>
+					<mdb-success
+					*ngIf="secretKeyUpdate.valid && (secretKeyUpdate.dirty || secretKeyUpdate.touched)">
+					Input valid
+					</mdb-success>
+				</div>
+
+				<div class="md-form mb-4">
+				  <p class="font-small blue-text d-flex justify-content-end">
+						<a class="blue-text ml-1" (click)="updateGenNewPassword()">Generate new secret</a>
+					</p>
+				</div>
+
+				<div class="md-form mb-4">
+				  <select class="browser-default custom-select" [formControl]="policyUpdate" title="select policy">
+						<option value="" disabled selected>Select policy</option>
+						<option [value]="policy" *ngFor="let policy of policies">{{policy}}</option>
+				  </select>
+				</div>
+
+				<div class="md-form mb-4">
+				  <select class="browser-default custom-select" [formControl]="statusUpdate" title="select status">
+						<option value="" disabled selected>Select status</option>
+						<option [value]="updateStatusVal" *ngFor="let updateStatusVal of updateStatusValues">{{updateStatusVal}}</option>
+				  </select>
+				</div>
+
+			</div>
+			<div class="modal-footer justify-content-center">
+				<button type="button" mdbBtn color="success" class="waves-light" aria-label="Close" (click)="updateApproveModal.hide()" mdbWavesEffect>Cancel</button>
+				<button type="button" mdbBtn color="danger" class="relative waves-light" mdbWavesEffect (click)="updateUserSave(); updateApproveModal.hide()">Update</button>
+			</div>
+		</div>
+	</div >
+</div >
+
+<!-- user create modal -->
+
+<div mdbModal #addUserModal="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog"
+	 aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+	<div class="modal-content">
+	  <div class="modal-header text-center">
+		<h4 class="modal-title w-100 font-weight-bold">Create new user</h4>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="addUserModal.hide()">
+		  <span aria-hidden="true">&times;</span>
+		</button>
+		</div>
+		<div class="modal-body mx-3">
+			<div class="md-form mb-5">
+			  <input type="text" id="defaultForm-access" [formControl]="newUserAccess" class="form-control"
+					 mdbInput mdbValidate>
+			  <label for="defaultForm-access">Access Key</label>
+			  <mdb-error *ngIf="newUserAccess.invalid && (newUserAccess.dirty || newUserAccess.touched)">
+				Input invalid
+			  </mdb-error>
+			  <mdb-success *ngIf="newUserAccess.valid && (newUserAccess.dirty || newUserAccess.touched)">
+				Input valid
+			  </mdb-success>
+			</div>
+
+			<div class="md-form mb-4">
+			  <input type="text" id="defaultForm-secret" [formControl]="newUserSecret" class="form-control"
+					 mdbInput mdbValidate>
+			  <label for="defaultForm-secret">Secret Key</label>
+			  <mdb-error *ngIf="newUserSecret.invalid && (newUserSecret.dirty || newUserSecret.touched)">
+				Input invalid
+			  </mdb-error>
+			  <mdb-success *ngIf="newUserSecret.valid && (newUserSecret.dirty || newUserSecret.touched)">
+				Input valid
+			  </mdb-success>
+			</div>
+
+			<div class="md-form mb-4">
+			  <select class="browser-default custom-select" [formControl]="newUserPolicy" title="select policy">
+					<option value="" disabled selected>Select policy</option>
+					<option [value]="policy" *ngFor="let policy of policies">{{policy}}</option>
+			  </select>
+			</div>
+
+			<div class="md-form mb-4">
+			  <p class="font-small blue-text d-flex justify-content-end">
+					<a class="blue-text ml-1" (click)="resetForm()">Generate new access\secret pair</a>
+			  </p>
+			</div>
+	  </div>
+	  <div class="modal-footer d-flex justify-content-center">
+		<button mdbBtn gradient="peach" rounded="true" class="waves-light" mdbWavesEffect (click)="createUser()">Create</button>
+	  </div>
+	</div>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Righteous&display=swap');
+
+  .content {
+    display: flex;
+    margin: 32px auto;
+    padding: 0 16px;
+    max-width: 960px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .visible {
+    display: flex !important;
+  }
+
+</style>
+<!-- Navbar -->
+<mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark special-color-dark">
+
+    <!-- Navbar brand -->
+    <mdb-navbar-brand><a class="navbar-brand" href="#">Adminio UI </a></mdb-navbar-brand>
+
+    <!-- Collapsible content -->
+    <links>
+
+        <!-- Links -->
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a [routerLink]="['/']" class="nav-link waves-light" mdbWavesEffect>Buckets</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a [routerLink]="['/users']" class="nav-link waves-light"  mdbWavesEffect>Users</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a [routerLink]="['/policies']" class="nav-link waves-light"  mdbWavesEffect>Policies</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a [routerLink]="['/groups']" class="nav-link waves-light"  mdbWavesEffect>Groups</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a [routerLink]="['/server']" class="nav-link waves-light"  mdbWavesEffect>Server</a>
+            </li>
+        </ul>
+        <!-- Links -->
+        <!-- Search form -->
+        <form class="form-inline select" mdbWavesEffect *ngIf="apiService.getMultiBackendStatus()">
+          <select class="select-text" (change)=apiService.overrideBackend(apiService.baseUrl) [(ngModel)]="apiService.baseUrl" [ngModelOptions]="{standalone: true}" title="Select backend">
+            <option value="" disabled selected>Select backend</option>
+            <option [value]="backend.url" *ngFor="let backend of apiService.getBackendsUrls()">{{backend.name}} ({{backend.url}})</option>
+          </select>
+          <span class="select-highlight"></span>
+					<span class="select-bar"></span>
+        </form>
+    </links>
+    <!-- Collapsible content -->
+
+</mdb-navbar>
+<!--/.Navbar-->
+<app-loading></app-loading>
+
+<router-outlet></router-outlet>
+
+<!-- Footer -->
+<footer class="page-footer font-small transparent fixed-bottom">
+
+  <!-- Copyright -->
+  <div class="text-right py-3 transparent">
+    <a href="https://github.com/rzrbld/adminio-ui/issues">create issue or fork at github.com<mdb-icon fab icon="github-alt" size="1x" class="px-1" aria-hidden="true"></mdb-icon></a> | v:1.7 &nbsp;&nbsp;
+  </div>
+  <!-- Copyright -->
+
+</footer>
+<!-- Footer -->

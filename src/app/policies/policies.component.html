@@ -1,0 +1,408 @@
+<div class="container" style="padding-top: 30px;">
+	<div class="row">
+		<div class="col-6 col-md-6">
+		    <h1>Policies</h1>
+		</div>
+		<div class="col-md-6 col-6 align-right">
+			<div class="btn-group" role="group">
+				<button type="button" mdbBtn  gradient="purple" rounded="true" class="relative waves-light" mdbWavesEffect rounded="true" data-toggle="modal" data-target="#uploadPolicy" (click)="this.resetUploadForm(); uploadModal.show()" mdbWavesEffect>
+					<mdb-icon fas icon="upload" class="mr-1"></mdb-icon>Upload policy
+				</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button type="button" mdbBtn  gradient="aqua" rounded="true" class="relative waves-light" mdbWavesEffect rounded="true" data-toggle="modal" data-target="#addPolicy" (click)="isEditMode(false); resetPloicyForm(true); prepareNewPolicyRaw(); addPolicyModal.show()" mdbWavesEffect>
+					<mdb-icon fas icon="plus" class="mr-1"></mdb-icon>Build policy
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 col-12 mx-auto">
+			<div class="md-form">
+			  <!-- <input type="text" class="form-control" id="search" mdbInput> -->
+			  <input type="text" [(ngModel)]="searchText" (ngModelChange)="searchItems()" class="form-control" id="search" mdbInput>
+			  <label for="search">Search</label>
+			</div>
+		</div>
+	</div>
+	<table mdbTable calss="table"  #tablePolicies="mdbTable" >
+		<thead class="thead-light">
+			<tr>
+			  <th>Name</th>
+			  <th>Action</th>
+			  <th>Principal</th>
+			  <th>Effect</th>
+			  <th>Resource</th>
+			  <th>Conditions</th>
+			  <th>Options</th>
+			</tr>
+		</thead>
+		<tbody *ngIf="(policies | json) != ({} | json)">
+			<tr mdbTableCol *ngFor="let pol of objectKeys(policies); let i = index">
+				<td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"><strong>{{objectKeys(policies[pol])}}</strong></td>
+				<td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
+					<ul class="type-none" >
+						<li class="type-none" *ngFor="let st of objectValues(policies[pol])[0].Statement">
+								<ul  class="type-none">
+									<li  class="type-none" *ngFor="let action of st.Action">{{action}}</li>
+								</ul>
+						</li>
+					</ul>
+				</td>
+				<td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
+					<div *ngIf="policies[pol].Statement?.Principal">
+						{{policies[pol].Statement.Principal}}
+					</div>
+				</td>
+				<td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
+					<ul class="type-none" >
+						<li class="type-none" *ngFor="let st of objectValues(policies[pol])[0].Statement">{{st.Effect}}</li>
+					</ul>
+				</td>
+				<td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
+					<ul class="type-none" >
+						<li class="type-none" *ngFor="let st of objectValues(policies[pol])[0].Statement">
+							<ul class="type-none">
+								<li class="type-none" *ngFor="let resource of st.Resource">{{resource}}</li>
+							</ul>
+						</li>
+					</ul>
+				</td>
+				<td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
+					<ul class="type-none" >
+						<li class="type-none" *ngFor="let st of objectValues(policies[pol])[0].Statement">
+							<ul class="type-none" *ngIf="st?.Condition">
+								<li class="type-none" *ngFor="let condition of objectKeys(st.Condition)">
+										{{condition}}
+									<ul >
+										<li *ngFor="let con of objectKeys(st.Condition[condition])">{{con}}
+											<ul>
+												<li *ngFor="let conKeyVal of st.Condition[condition][con]">
+													{{conKeyVal}}
+											  </li>
+										  </ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</td>
+				<td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
+					<a (click)="rawPrepare(objectValues(policies[pol])[0]); rawViewModal.show()"  mdbTooltip="View Raw JSON" placement="top"><mdb-icon fas icon="eye"  size="1x" class="green-text pr-1" aria-hidden="true"></mdb-icon></a><span class="pr-1">&nbsp;</span>
+					<a mdbTooltip="Remove Policy" placement="top" (click)="deletePolicyPrepare(objectKeys(policies[pol])); deleteApproveModal.show()"><mdb-icon fas icon="trash-alt" size="1x" class="red-text pr-1" aria-hidden="true"></mdb-icon></a><span class="pr-1">&nbsp;</span>
+		  		<a mdbTooltip="Edit or Copy Policy" placement="top" class="action-link" (click)="isEditMode(true);updatePolicyPrepare(objectKeys(policies[pol]));addPolicyModal.show()"><mdb-icon fas icon="pencil-alt" size="1x" class="green-text pr-1" aria-hidden="true"></mdb-icon></a><span class="pr-1">&nbsp;</span>
+					<a mdbTooltip="Download Policy" placement="top" [href]="downloadJsonHref" download="{{objectKeys(policies[pol])}}.json" (click)="downloadPolicy(objectValues(policies[pol])[0])"><mdb-icon fas icon="download" size="1x" class="green-text pr-1" aria-hidden="true"></mdb-icon></a>
+				</td>
+			</tr>
+		</tbody>
+		<tfoot class="grey lighten-5 w-100">
+			<tr>
+				<td colspan="7">
+				  <mdb-table-pagination [tableEl]="tablePolicies" [searchDataSource]="policies"></mdb-table-pagination>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</div>
+<br/>
+<br/>
+
+<!-- delete approve modal -->
+
+<div mdbModal #deleteApproveModal="mdbModal" class="modal fade right" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+   aria-hidden="true" [config]='{backdrop: true, ignoreBackdropClick: true}'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close pull-right" aria-label="Close" (click)="deleteApproveModal.hide()">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title w-100" id="myModalLabel">Remove Policy</h4>
+            </div>
+            <div class="modal-body">
+                Are you shure? <br/> After you click on <strong>"Delete"</strong> button policy <strong>{{policyToDelete}}</strong> will be removed.
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" mdbBtn color="success" class="waves-light" aria-label="Close" (click)="deleteApproveModal.hide()" mdbWavesEffect>Cancel</button>
+                <button type="button" mdbBtn color="danger" class="relative waves-light" mdbWavesEffect (click)="deletePolicy(); deleteApproveModal.hide()">Delete</button>
+            </div>
+        </div>
+    </div >
+</div >
+
+<!-- Upload -->
+
+<div mdbModal #uploadModal="mdbModal" class="modal fade right overflow-auto" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel"
+   aria-hidden="true" [config]='{backdrop: true, ignoreBackdropClick: true}'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close pull-right" aria-label="Close" (click)="uploadModal.hide()">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title w-100" id="myModalLabel">Upload Policy</h4>
+            </div>
+            <div class="modal-body">
+							<div class="row">
+								<div class="col-md-12 ml-auto">
+									<div class="d-flex justify-content-around p-1 mb-3 text-center">
+										<input type="text" class="form-control" placeholder="Policy Name" [(ngModel)]="uploadPolicyName" name="uploadPolicyName"  aria-label="policyName" aria-describedby="basic-addon1">
+									</div>
+									<div class="d-flex justify-content-around p-1 mb-3 text-center">
+										<div class="custom-file">
+										  <input type="file" accept=".policy,.json" class="custom-file-input" (change)="fileChanged($event)" #uploadPolicyFile name="uploadPolicyFile">
+										  <label class="custom-file-label" for="customFileLang">{{uploadPolicyFileName == "" ? "Choose .policy or .json file" : uploadPolicyFileName}}</label>
+										</div>
+									</div>
+								</div>
+						  </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="uploadModal.hide()" mdbWavesEffect>Cancel</button>
+		           	<button type="button" mdbBtn gradient="peach" rounded="true" class="relative waves-light" mdbWavesEffect (click)="uploadPolicy();uploadModal.hide()">Upload</button>
+            </div>
+        </div>
+    </div >
+</div >
+
+<!-- Raw view Modal -->
+
+<div mdbModal #rawViewModal="mdbModal" class="modal fade right overflow-auto" tabindex="-1" role="dialog" aria-labelledby="rawViewModalLabel"
+   aria-hidden="true" [config]='{backdrop: true, ignoreBackdropClick: true}'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close pull-right" aria-label="Close" (click)="rawViewModal.hide()">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title w-100" id="myModalLabel">Raw Policy</h4>
+            </div>
+            <div class="modal-body">
+            	<ngx-json-viewer [json]="rawView"></ngx-json-viewer>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="rawViewModal.hide()" mdbWavesEffect>Close</button>
+            </div>
+        </div>
+    </div >
+</div >
+
+<!-- Policy build up Modal-->
+
+<div mdbModal #addPolicyModal="mdbModal" class="modal fade right overflow-auto" tabindex="-1" role="dialog" aria-labelledby="addPolicyModalLabel"
+   aria-hidden="true" [config]='{backdrop: true, ignoreBackdropClick: true}'>
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close pull-right" aria-label="Close" (click)="addPolicyModal.hide()">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <span><h4 class="modal-title w-100" id="myModalLabel">{{modalCreateEditTitle}}</h4>Switch to <button type="button" mdbBtn color="link" class="link-button" (click)="switchAdvanced()">{{advancedInterfaceLabel}}</button> interface </span>
+            </div>
+            <div class="modal-body">
+            	<!-- <form class="text-center" name="newPolicy"  > -->
+            		<div class="row">
+					    <div class="col-md-2 ml-auto">&nbsp;</div>
+					    <div class="col-md-8 ml-auto">
+
+				    	<div class="alert alert-info" role="alert" *ngIf="modalEditMode">
+                <mdb-icon fas icon="info-circle" class="mr-1"></mdb-icon>  In Edit mode you can make a copy of policy - Just rename it!
+              </div>
+
+
+					    <div class="d-flex justify-content-around p-1 mb-3 text-center">
+								<input type="text" class="form-control" placeholder="Policy Name" [(ngModel)]="newPolicy.name" name="newPolicyName"  aria-label="policyName" aria-describedby="basic-addon1">
+							</div>
+
+							<div class="d-flex justify-content-around p-1 text-center">
+								<div>
+									<!-- Allow -->
+									<div class="custom-control custom-radio custom-control-inline">
+									  <input type="radio" checked class="custom-control-input" id="statementAllow"  value="Allow" [(ngModel)]="newPolicy.effect"  name="policyStatementEffect" mdbInput>
+									  <label class="custom-control-label" for="statementAllow">Allow</label>
+									</div>
+								</div>
+								<div>
+										<!-- Deny -->
+									<div class="custom-control custom-radio custom-control-inline">
+									  <input type="radio" class="custom-control-input" id="statementDeny" value="Deny" [(ngModel)]="newPolicy.effect" name="policyStatementEffect"  mdbInput>
+									  <label class="custom-control-label" for="statementDeny">Deny</label>
+									</div>
+								</div>
+							</div>
+
+							<div id="actionsStatement" class="d-flex justify-content-around p-1 mb-3 text-center" *ngIf="!selectedAdmins.length>0">
+								<angular2-multiselect [data]="dropdownActionList" [(ngModel)]="selectedActions"
+							    [settings]="dropdownActionSettings"
+							    (onSelect)="onActionItemSelect($event)"
+							    (onDeSelect)="onActionItemDeSelect($event)"
+							    (onSelectAll)="onActionSelectAll($event)"
+							    (onDeSelectAll)="onActionDeSelectAll($event)"></angular2-multiselect>
+							</div>
+
+							<div id="adminsStatement" class="d-flex justify-content-around p-1 mb-3 text-center" *ngIf="!selectedActions.length>0">
+								<angular2-multiselect [data]="dropdownAdminList" [(ngModel)]="selectedAdmins"
+							    [settings]="dropdownAdminSettings"
+							    (onSelect)="onAdminItemSelect($event)"
+							    (onDeSelect)="onAdminItemDeSelect($event)"
+							    (onSelectAll)="onAdminSelectAll($event)"
+							    (onDeSelectAll)="onAdminDeSelectAll($event)"></angular2-multiselect>
+							</div>
+
+							<div class="input-group mb-3" *ngIf="advancedInterface">
+							  <div class="input-group-prepend">
+							    <span class="input-group-text" id="inputGroup-sizing-default">Principal</span>
+							  </div>
+							  <input type="text" class="form-control" aria-label="Principal" [(ngModel)]="newStatement.Principal" name="newPrincipal" aria-describedby="inputGroup-sizing-default">
+							</div>
+
+							<div class="separator">Buckets section</div>
+							<fieldset>
+								<div class="d-flex justify-content-around p-1 mb-1 text-center">
+									<div class="input-group mb-3">
+									  <div class="input-group-prepend">
+									    <span class="input-group-text" id="s3-prefix">arn:aws:s3:::</span>
+									  </div>
+									  <input type="text" class="form-control" placeholder="<bucket_name>/<key_name>" [(ngModel)]="newPolicy.bucket" aria-label="Recipient's username"
+									    aria-describedby="s3-prefix">
+									  <div class="input-group-append">
+									    <button mdbBtn gradient="blue" rounded="true"  outline="true" size="md" class="m-0 px-3 py-2" type="button" id="s3-prefix"
+									      mdbWavesEffect (click)="addBucketStatement()">Add bucket</button>
+									  </div>
+									</div>
+								</div>
+								<div id="bucketStatements">
+									<table  mdbTable mdbTableScroll scrollY="true" maxHeight="300"  class="table"  small="true">
+										<thead class="thead-light">
+											<th>Bucket</th>
+											<th>Options</th>
+										</thead>
+										<tbody>
+											<tr *ngFor="let bst of newStatement.Resource; let i = index" [attr.data-index]="i">
+												<td>{{bst}}</td>
+												<td><a title="Remove bucket statement" (click)="removeBucketStatement(i)"><mdb-icon fas icon="times-circle"  size="1x" class="green-text pr-3" aria-hidden="true"></mdb-icon></a></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</fieldset>
+
+							<fieldset *ngIf="advancedInterface">
+								<div class="separator">Conditions section</div>
+								<div id="conditionStatements" class="d-flex justify-content-around p-1 mb-3 text-center">
+									<angular2-multiselect [data]="dropdownConditionList" [(ngModel)]="selectedCondition"
+								    [settings]="dropdownConditionSettings"
+								    (onSelect)="onConditionItemSelect($event)"
+								    (onDeSelect)="onConditionItemDeSelect($event)"
+								    (onSelectAll)="onConditionSelectAll($event)"
+								    (onDeSelectAll)="onConditionDeSelectAll($event)"></angular2-multiselect>
+								</div>
+								<div id="conditionKeyStatements" class="d-flex justify-content-around p-1 mb-3 text-center">
+									<angular2-multiselect [data]="dropdownConditionKeyList" [(ngModel)]="selectedConditionKey"
+								    [settings]="dropdownConditionKeySettings"
+								    (onSelect)="onConditionKeyItemSelect($event)"
+								    (onDeSelect)="onConditionItemDeSelect($event)"
+								    (onSelectAll)="onConditionKeySelectAll($event)"
+								    (onDeSelectAll)="onConditionKeyDeSelectAll($event)"></angular2-multiselect>
+								</div>
+								<div class="d-flex justify-content-around p-1 mb-3 text-center">
+									<div class="input-group mb-3">
+									  <input type="text" class="form-control" placeholder="Condition Value" aria-label="Condition Value" [(ngModel)]="newConditionValue" name="newConditionValue"
+									    aria-describedby="button-addCondition">
+									  <div class="input-group-append">
+									    <button mdbBtn gradient="blue" outline="true" size="md" class="m-0 px-3 py-2 relative waves-light" type="button" id="button-addCondition"  (click)="addCondition()"
+											 mdbWavesEffect >Add Condition</button>
+									  </div>
+									</div>
+								</div>
+								<div id="conditionStatementsList">
+									<table  mdbTable mdbTableScroll scrollY="true" maxHeight="300"  class="table"  small="true">
+										<thead class="thead-light">
+											<th>Condition and options</th>
+										</thead>
+										<tbody *ngIf="newStatement?.Condition">
+											<tr *ngFor="let condition of objectKeys(newStatement.Condition)">
+												<td>
+													{{condition}}
+													<ul>
+														<li *ngFor="let con of objectKeys(newStatement.Condition[condition])">{{con}}
+															<ul>
+																<li *ngFor="let conKeyVal of newStatement.Condition[condition][con]; let i = index;" [attr.data-index]="i">
+																	{{conKeyVal}}&nbsp;&nbsp;<a title="Remove condition" (click)="removeCondition(i,con,condition)"><mdb-icon fas icon="times-circle"  size="1x" class="green-text pr-3" aria-hidden="true"></mdb-icon></a>
+																</li>
+															</ul>
+														</li>
+													</ul>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</fieldset>
+
+							<hr/>
+						</div>
+						<div class="col-md-2 ml-auto">&nbsp;</div>
+					</div>
+
+
+					<div class="d-flex justify-content-around p-1 mb-3 text-center">
+						<button type="button" mdbBtn gradient="purple" rounded="true" class="relative waves-light btn btn-sm" mdbWavesEffect (click)="addStatement()"><mdb-icon fas icon="plus" class="mr-1"></mdb-icon>Add statement</button>
+					</div>
+					<div id="statements">
+						<hr/>
+						<table  mdbTable mdbTableScroll scrollY="true" maxHeight="300"  class="table"  small="true">
+							<thead class="thead-light">
+								<th>Effect</th>
+								<th>Action</th>
+								<th>Resource</th>
+								<th>Conditions</th>
+								<th>Options</th>
+							</thead>
+							<tbody>
+								<tr *ngFor="let st of newPolicyRaw.Statement; let i = index" [attr.data-index]="i">
+									<td>{{st.Effect}}</td>
+									<td>
+										<ul  class="type-none">
+											<li  class="type-none" *ngFor="let action of st.Action">{{action}}</li>
+										</ul>
+									</td>
+									<td>
+										<ul  class="type-none">
+											<li  class="type-none" *ngFor="let resource of st.Resource">{{resource}}</li>
+										</ul>
+									</td>
+									<td>
+										<ul class="type-none" *ngIf="st?.Condition">
+											<li class="type-none" *ngFor="let condition of objectKeys(st.Condition)">
+													{{condition}}
+												<ul >
+													<li *ngFor="let con of objectKeys(st.Condition[condition])">{{con}}
+														<ul>
+															<li *ngFor="let conKeyVal of st.Condition[condition][con]">
+																{{conKeyVal}}
+														  </li>
+													  </ul>
+													</li>
+												</ul>
+											</li>
+										</ul>
+									</td>
+									<td>
+										<a title="Remove statement" (click)="removeStatement(i)"><mdb-icon fas icon="times-circle"  size="1x" class="green-text pr-1" aria-hidden="true"></mdb-icon></a>
+										&nbsp;&nbsp;
+										<a title="Edit statement" (click)="editStatement(i)"><mdb-icon fas icon="pencil-alt"  size="1x" class="green-text pr-1" aria-hidden="true"></mdb-icon></a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+                <!-- </form> -->
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" mdbBtn gradient="peach" rounded="true" class="relative waves-light" mdbWavesEffect (click)="createPolicy();addPolicyModal.hide()">{{modalCreateEditButtonText}}</button>
+            </div>
+        </div>
+    </div >
+</div >

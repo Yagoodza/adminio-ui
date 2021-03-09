@@ -1,0 +1,142 @@
+<div class="container" style="padding-top: 30px;" *ngFor="let server of serviceInfo?.servers">
+	<h1>Server statistics {{server.endpoint}} </h1>
+	<div class="mb-4">
+		<a (click)="rawPrepare(serviceInfo); rawViewModal.show()"  mdbTooltip="View Raw JSON" placement="top" style="text-decoration: underline;"><mdb-icon fas icon="eye"  size="1x" class="green-text pr-1" aria-hidden="true"></mdb-icon>View Raw JSON</a><span class="pr-3">&nbsp;</span><br/>
+		<strong>minio version:</strong> {{server.version}} <br/>
+		<strong>uptime:</strong> {{math.round(server.uptime/60)}} min. <br/>
+		<strong>network:</strong> {{server.network[server.endpoint]}}
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Storage</h3>
+			<div class="container" style="padding-top: 10px;" *ngFor="let disk of server.disks">
+				<table mdbTable bordered="true" small="true" class="table">
+				  <thead class="thead-light">
+				    <tr>
+				      <th>Total</th>
+				      <th>Used</th>
+				      <th>State</th>
+				      <th>Path</th>
+				    </tr>
+				  </thead>
+				  <tbody *ngIf="disk">
+				    <tr mdbTableCol>
+				      <td>{{math.round((disk.totalspace/1024/1024/1024)*100)/100}} Gb</td>
+				      <td>{{math.round((disk.usedspace/1024/1024/1024)*100)/100}} Gb</td>
+				      <td>{{disk.state}}</td>
+				      <td>{{disk.path}}</td>
+				    </tr>
+				  </tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<br/>
+	<br/>
+	<div class="row" *ngIf="diskUsageInfo?.lastUpdate">
+		<div class="col-md-12">
+			<h3>Disk usage info</h3>
+			<div class="container" style="padding-top: 10px;">
+				<p>Last update: {{diskUsageInfo?.lastUpdate.split('T').join(' ').split('.')[0]}}</p>
+				<table  mdbTable bordered="true" small="true" class="table">
+					<thead class="thead-light">
+						<tr>
+							<th>Objects count</th>
+							<th>Objects total size</th>
+							<th>Buckets count</th>
+						</tr>
+					</thead>
+					<tbody *ngIf="diskUsageInfo">
+						<tr mdbTableCol>
+							<td>{{diskUsageInfo.objectsCount}}</td>
+							<td>{{math.round((diskUsageInfo.objectsTotalSize/1024/1024/1024)*100)/100}} Gb</td>
+							<td>{{diskUsageInfo.bucketsCount}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<br/>
+	<br/>
+	<div class="row" *ngIf="diskUsageInfo?.objectsSizesHistogram && szChartDatasets[0].data.length>0">
+		<div class="col-md-12">
+			<h3>Bucket sizes chart</h3>
+			<div class="row">
+				<div class="col-md-1">
+					&nbsp;
+				</div>
+				<div class="col-md-10">
+					<div class="container" style="padding-top: 10px; display: block;">
+						<canvas mdbChart
+								[chartType]="szChartType"
+								[datasets]="szChartDatasets"
+								[labels]="szChartLabels"
+								[colors]="szChartColors"
+								[options]="szChartOptions"
+								[legend]="true"
+								(chartHover)="szChartHovered($event)"
+								(chartClick)="szChartClicked($event)">
+						</canvas>
+					</div>
+				</div>
+				<div class="col-md-1">
+						&nbsp;
+				</div>
+			</div>
+		</div>
+	</div>
+	<br/>
+	<br/>
+	<div class="row" *ngIf="diskUsageInfo?.objectsSizesHistogram && hgChartDatasets[0].data.length>0">
+		<div class="col-md-12">
+	  	<h3>Object sizes histogram</h3>
+			<div class="row">
+				<div class="col-md-2">
+					&nbsp;
+				</div>
+				<div class="col-md-8">
+					<div class="container" style="padding-top: 10px; display: block;">
+						<canvas mdbChart
+								[chartType]="hgChartType"
+								[datasets]="hgChartDatasets"
+								[labels]="hgChartLabels"
+								[colors]="hgChartColors"
+								[options]="hgChartOptions"
+								[legend]="false"
+								(chartHover)="hgChartHovered($event)"
+								(chartClick)="hgChartClicked($event)">
+						</canvas>
+					</div>
+				</div>
+				<div class="col-md-2">
+						&nbsp;
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<br/>
+<br/>
+
+<!-- Raw view Modal -->
+
+<div mdbModal #rawViewModal="mdbModal" class="modal fade right overflow-auto" tabindex="-1" role="dialog" aria-labelledby="rawViewModalLabel"
+   aria-hidden="true" [config]='{backdrop: true, ignoreBackdropClick: true}'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close pull-right" aria-label="Close" (click)="rawViewModal.hide()">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title w-100" id="myModalLabel">Raw Server Info</h4>
+            </div>
+            <div class="modal-body">
+            	<ngx-json-viewer [json]="rawView"></ngx-json-viewer>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="rawViewModal.hide()" mdbWavesEffect>Close</button>
+            </div>
+        </div>
+    </div >
+</div >
