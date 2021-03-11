@@ -41,9 +41,9 @@ export class BucketsComponent implements OnInit,  AfterViewInit  {
   updateQuotaTypeChanged = false;
   updateQuotaChanged = false;
 
-  newBucketPolicy = "none";
+  newBucketPolicy = "отсутствует";
   // updateBucketPolicy = "none"
-  policyTypes = ["none", "upload", "download", "public", "custom"];
+  policyTypes = ["отсутствует", "загрузка", "скачивание", "публичная", "индивидуальная"];
   updatePolicyTypeChanged = false;
   uploadPolicyName;
   uploadPolicyFile;
@@ -295,7 +295,7 @@ export class BucketsComponent implements OnInit,  AfterViewInit  {
     this.newBucketEventFilterSuffix = "";
     this.selectedEventTypes = [];
     this.newBucketQuotaType = "";
-    this.newBucketPolicy = "none";
+    this.newBucketPolicy = "отсутствует";
     this.newBucketQuota = "";
     this.newBucketTagName = "";
     this.newBucketTagValue = "";

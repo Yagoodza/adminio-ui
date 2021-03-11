@@ -74,9 +74,9 @@ export class GroupsComponent implements OnInit,  AfterViewInit  {
 
 	    this.dropdownSettings = {
 			singleSelection: false,
-			text:"Select Members",
-			selectAllText:'Select All',
-			unSelectAllText:'UnSelect All',
+			text:"Выбор участников",
+			selectAllText:'Выделить всех',
+			unSelectAllText:'Снять все выделения',
 			enableSearchFilter: true
 		};
 	}
@@ -127,17 +127,17 @@ export class GroupsComponent implements OnInit,  AfterViewInit  {
 	private isEditMode(state){
 		this.modalEditMode = state;
 		if(state){
-		  this.modalCreateEditTitle = "Edit group"
-		  this.modalCreateEditButtonText = "Update"
+		  this.modalCreateEditTitle = "Редактирование группы"
+		  this.modalCreateEditButtonText = "Обновить"
 		}else{
-		  this.modalCreateEditTitle = "Create group"
-		  this.modalCreateEditButtonText = "Create"
+		  this.modalCreateEditTitle = "Новая группа"
+		  this.modalCreateEditButtonText = "Создать"
 		}
 	}
 
 	private isNowCopyMode(){
-		this.modalCreateEditTitle = "Copy group"
-		this.modalCreateEditButtonText = "Copy"
+		this.modalCreateEditTitle = "Копировать группу"
+		this.modalCreateEditButtonText = "Копировать"
 	}
 
 	private commaToBr(arr) {

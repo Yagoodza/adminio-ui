@@ -1,30 +1,30 @@
 <div class="container" style="padding-top: 30px;">
     <div class="row">
         <div class="col-9 col-md-9">
-            <h1>Buckets</h1>
+            <h1>Папки</h1>
         </div>
         <div class="col-md-3 col-3 align-right">
-            <button type="button" mdbBtn gradient="aqua" rounded="true" class="relative waves-light" mdbWavesEffect rounded="true" data-toggle="modal" data-target="#addBucket" mdbWavesEffect (click)="resetForm();addBucketModal.show()"><mdb-icon fas icon="plus" class="mr-1"></mdb-icon>Add bucket</button>
+            <button type="button" mdbBtn gradient="aqua" rounded="true" class="relative waves-light" mdbWavesEffect rounded="true" data-toggle="modal" data-target="#addBucket" mdbWavesEffect (click)="resetForm();addBucketModal.show()"><mdb-icon fas icon="plus" class="mr-1"></mdb-icon>Добавить папку</button>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 col-12 mx-auto">
           <div class="md-form">
             <input type="text" [(ngModel)]="searchText" class="form-control" id="search" mdbInput>
-            <label for="search">Search</label>
+            <label for="search">Поиск</label>
           </div>
         </div>
     </div>
 	<table mdbTable calss="table" #tableBuckets="mdbTable" >
 	  <thead class="thead-light">
 	    <tr>
-	      <th>Name</th>
-	      <th>Tags</th>
-	      <th>Creation Date</th>
-	      <th *ngIf="(diskUsageInfo?.bucketsSizes | json) != ({} | json)">Size</th>
-	      <th>Quota</th>
-	      <th *ngIf="serviceInfo?.sqsARN">Event</th>
-	      <th>Options</th>
+	      <th>Имя</th>
+	      <th>Теги</th>
+	      <th>Дата создания</th>
+	      <th *ngIf="(diskUsageInfo?.bucketsSizes | json) != ({} | json)">Размер</th>
+	      <th>Квота</th>
+	      <th *ngIf="serviceInfo?.sqsARN">Событие</th>
+	      <th>Опции</th>
 	    </tr>
 	  </thead>
 	  <tbody *ngIf="buckets">
@@ -95,9 +95,9 @@
           </span>
         </td>
 	  	  <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
-	  	  	<a mdbTooltip="Update Bucket" placement="top" (click)="updateBucketPrepare(buckets[b].name,buckets[b].quota?.quota,buckets[b].quota?.quotatype,buckets[b].tags); editBucketModal.show()"><mdb-icon fas icon="pencil-alt" size="1x" class="green-text pr-1" aria-hidden="true"></mdb-icon></a><span class="pr-1">&nbsp;</span>
-	  	  	<a mdbTooltip="Remove Bucket" placement="top" (click)="deleteBucketPrepare(buckets[b].name); deleteApproveModal.show()"><mdb-icon fas icon="trash-alt" size="1x" class="red-text pr-1" aria-hidden="true"></mdb-icon></a><span class="pr-1">&nbsp;</span>
-	  	  	<a mdbTooltip="Bucket Lifecycyle" placement="top" (click)="bucketLifecycle(buckets[b].name); downloadLifecycle(buckets[b].name); resetLifecycleForm(); lifecycyleModal.show()"><mdb-icon fas icon="recycle" size="1x" class="green-text pr-1" aria-hidden="true"></mdb-icon></a><span class="pr-1">&nbsp;</span>
+	  	  	<a mdbTooltip="Редактировать папку" placement="top" (click)="updateBucketPrepare(buckets[b].name,buckets[b].quota?.quota,buckets[b].quota?.quotatype,buckets[b].tags); editBucketModal.show()"><mdb-icon fas icon="pencil-alt" size="1x" class="green-text pr-1" aria-hidden="true"></mdb-icon></a><span class="pr-1">&nbsp;</span>
+	  	  	<a mdbTooltip="Удалить папку" placement="top" (click)="deleteBucketPrepare(buckets[b].name); deleteApproveModal.show()"><mdb-icon fas icon="trash-alt" size="1x" class="red-text pr-1" aria-hidden="true"></mdb-icon></a><span class="pr-1">&nbsp;</span>
+	  	  	<a mdbTooltip="Жизненый цикл папки" placement="top" (click)="bucketLifecycle(buckets[b].name); downloadLifecycle(buckets[b].name); resetLifecycleForm(); lifecycyleModal.show()"><mdb-icon fas icon="recycle" size="1x" class="green-text pr-1" aria-hidden="true"></mdb-icon></a><span class="pr-1">&nbsp;</span>
 	  	  	<a *ngIf="buckets[b].events.LambdaConfigs?.length || buckets[b].events.TopicConfigs?.length || buckets[b].events.QueueConfigs?.length" mdbTooltip="Remove Bucket Events" placement="top" (click)="removeBucketNotificationPrepare(buckets[b].name); removeNotificationApproveModal.show()"><mdb-icon fas icon="bell-slash" size="1x" class="red-text pr-1" aria-hidden="true"></mdb-icon></a><span class="pr-1" *ngIf="buckets[b].events.LambdaConfigs?.length || buckets[b].events.TopicConfigs?.length || buckets[b].events.QueueConfigs?.length">&nbsp;</span>
           <a *ngIf="buckets[b].quota?.quota" mdbTooltip="Remove Bucket Quota" placement="top" (click)="deleteBucketQuotaPrepare(buckets[b].name); removeQuotaApproveModal.show()"><mdb-icon fas icon="expand" size="1x" class="red-text pr-1" aria-hidden="true"></mdb-icon></a>
           <a *ngIf="buckets[b].encryption?.Rules" mdbTooltip="Remove Bucket Encryption" placement="top" (click)="deleteBucketEncryptionPrepare(buckets[b].name); removeEncryptionApproveModal.show()"><mdb-icon fas icon="unlock-alt" size="1x" class="red-text pr-1" aria-hidden="true"></mdb-icon></a>
@@ -171,7 +171,7 @@
                 <h4 class="modal-title w-100" id="myModalLabel">Remove Bucket</h4>
             </div>
             <div class="modal-body">
-                Are you shure? <br/> After you click on <strong>"Delete"</strong> button bucket <strong>{{bucketToDelete}}</strong> will be removed.
+                Вы уверены? <br/> После нажатия на кнопку <strong>"УДАЛИТЬ"</strong> папка <strong>{{bucketToDelete}}</strong> будет удалена.
             </div>
             <div class="modal-footer justify-content-center">
                 <button type="button" mdbBtn color="success" class="waves-light" aria-label="Close" (click)="deleteApproveModal.hide()" mdbWavesEffect>Cancel</button>
@@ -261,18 +261,18 @@
                 <button type="button" class="close pull-right" aria-label="Close" (click)="addBucketModal.hide()">
                     <span aria-hidden="true">×</span>
                 </button>
-                <h4 class="modal-title w-100" id="myModalLabel">Create Bucket</h4>
+                <h4 class="modal-title w-100" id="myModalLabel">Создать папку</h4>
             </div>
             <div class="modal-body">
                 <div class="d-flex justify-content-around mb-3 text-center">
-        					<input type="text" class="form-control" placeholder="Bucket Name" [(ngModel)]="newBucketName" name="newBucketName"  aria-label="bucketName" aria-describedby="basic-addon1" autofocus>
+        					<input type="text" class="form-control" placeholder="Имя папки" [(ngModel)]="newBucketName" name="newBucketName"  aria-label="bucketName" aria-describedby="basic-addon1" autofocus>
         				</div>
                 <div class="alert alert-info" role="alert">
-                  <mdb-icon fas icon="info-circle" class="mr-1"></mdb-icon>  You can pass multiple names with "," delimiter
+                  <mdb-icon fas icon="info-circle" class="mr-1"></mdb-icon>  Вы можете передать несколько имен разделенных зяпятой
                 </div>
-                <div class="separator pointer">Policy</div>
+                <div class="separator pointer">Правила</div>
                 <div class="d-flex justify-content-around p-1 text-center">
-                  <select class="browser-default custom-select" (change)="updatePolicyType()" [(ngModel)]="newBucketPolicy" title="Select policy type">
+                  <select class="browser-default custom-select" (change)="updatePolicyType()" [(ngModel)]="newBucketPolicy" title="Выберите тип прав">
                     <option [value]="pType" *ngFor="let pType of policyTypes">{{pType}}</option>
                   </select>
                 </div>
@@ -283,52 +283,52 @@
                   </div>
                 </div>
                 <div class="mb-3" *ngIf="serviceInfo?.services?.vault?.status != 'disabled'">
-                  <div class="separator pointer">Encryption</div>
-                  <select class="browser-default custom-select" [(ngModel)]="newBucketEncryption" title="Select encryption type">
-                    <option value="" disabled selected>Select encryption</option>
+                  <div class="separator pointer">Шифрование</div>
+                  <select class="browser-default custom-select" [(ngModel)]="newBucketEncryption" title="Выбор типа шифрования">
+                    <option value="" disabled selected>выбор шифрования</option>
                     <option [value]="encType" *ngFor="let encType of encryptionTypes">{{encType}}</option>
                   </select><br/><br/>
                   <div class="d-flex justify-content-around mb-3 text-center" *ngIf="newBucketEncryption == 'sse-kms'">
           					<input type="text" class="form-control" placeholder="Master Key ID" [(ngModel)]="newBucketMasterKeyID" name="newBucketMasterKeyID"  aria-label="bucketName" aria-describedby="basic-addon1">
           				</div>
                 </div>
-                <div class="separator pointer">Tags</div>
+                <div class="separator pointer">Метки</div>
                 <div class="d-flex justify-content-around mb-3 text-center">
                   <div class="form-row">
                       <div class="col">
-                          <input type="text" id="newBucketTagName" [(ngModel)]="newBucketTagName" class="form-control" placeholder="Tag name">
+                          <input type="text" id="newBucketTagName" [(ngModel)]="newBucketTagName" class="form-control" placeholder="Имя метки">
                       </div>
                       <div class="col">
-                          <input type="text" id="newBucketTagValue" [(ngModel)]="newBucketTagValue" class="form-control" placeholder="Tag value">
+                          <input type="text" id="newBucketTagValue" [(ngModel)]="newBucketTagValue" class="form-control" placeholder="Значение метки">
                       </div>
                       <div class="col-2">
-                          <button class="btn btn-sm blue-gradient button-fix" title="add more tags" (click)="createFormAddTag()"><i class="fas fa-plus"></i></button>
+                          <button class="btn btn-sm blue-gradient button-fix" title="добавить метки" (click)="createFormAddTag()"><i class="fas fa-plus"></i></button>
                       </div>
                   </div>
         				</div>
                 <section id="listTags" *ngIf="newBucketTagsList">
                   <span class="badge badge-primary ml-2"  mdbTooltip="click to delete" *ngFor="let tag of objectKeys(newBucketTagsList)" (click)="createFormRemoveTag(tag)">{{tag}}: {{newBucketTagsList[tag]}}</span>
                 </section>
-                <div class="separator pointer" (click)="toggleShowQuota()">Quota<mdb-icon fas icon="angle-down" class="pl-1" *ngIf="!uiShowQuota"></mdb-icon><mdb-icon fas icon="angle-up" class="pl-1" *ngIf="uiShowQuota"></mdb-icon></div>
+                <div class="separator pointer" (click)="toggleShowQuota()">Квота<mdb-icon fas icon="angle-down" class="pl-1" *ngIf="!uiShowQuota"></mdb-icon><mdb-icon fas icon="angle-up" class="pl-1" *ngIf="uiShowQuota"></mdb-icon></div>
                 <span *ngIf="uiShowQuota">
 
                   <div class="d-flex justify-content-around p-1 text-center">
-                    <select class="browser-default custom-select" [(ngModel)]="newBucketQuotaType" title="Select quota type">
-                      <option value="" disabled selected>Select quota type</option>
+                    <select class="browser-default custom-select" [(ngModel)]="newBucketQuotaType" title="Выбрать тип квоты">
+                      <option value="" disabled selected>Выбрать тип квоты</option>
                       <option [value]="qType" *ngFor="let qType of quotaTypes">{{qType}}</option>
                     </select>
     							</div>
 
                   <div class="alert alert-info" role="alert">
                     <mdb-icon fas icon="info-circle" class="mr-1"></mdb-icon>
-                    In <b>"fifo"</b> mode - old data automatically will be removed when you reach quota limit. <br/>
-                    In <b>"hard"</b> mode - you can't add new data to bucket if quota limit reached.
+                    В режиме <b>"fifo"</b> старые данные автоматически удаляются при достижении лимита квоты. <br/>
+                    В режиме <b>"hard"</b> вы не можете добавлять новые данные в корзину, если достигнут предел квоты.
                   </div>
 
                   <div class="input-group d-flex justify-content-around mb-3 text-center">
-          					<input type="text" class="form-control" placeholder="Quota in bytes" [(ngModel)]="newBucketQuota" name="newBucketQuota"  aria-label="bucketQuota" aria-describedby="basic-addon1" autofocus>
+          					<input type="text" class="form-control" placeholder="Квота в байтах" [(ngModel)]="newBucketQuota" name="newBucketQuota"  aria-label="bucketQuota" aria-describedby="basic-addon1" autofocus>
                       <div class="input-group-append">
-                        <div class="input-group-text">Bytes</div>
+                        <div class="input-group-text">Байты</div>
                       </div>
                     </div>
                 </span>
@@ -356,7 +356,7 @@
                 </div>
             </div>
             <div class="modal-footer justify-content-center">
-                <button type="button" mdbBtn gradient="peach" rounded="true" class="relative waves-light" mdbWavesEffect (click)="createBucket(); addBucketModal.hide()">Create</button>
+                <button type="button" mdbBtn gradient="peach" rounded="true" class="relative waves-light" mdbWavesEffect (click)="createBucket(); addBucketModal.hide()">Создать</button>
             </div>
         </div>
     </div >
@@ -372,15 +372,15 @@
                 <button type="button" class="close pull-right" aria-label="Close" (click)="editBucketModal.hide()">
                     <span aria-hidden="true">×</span>
                 </button>
-                <h4 class="modal-title w-100" id="myModalLabel">Update Bucket</h4>
+                <h4 class="modal-title w-100" id="myModalLabel">Редактировать папку</h4>
             </div>
             <div class="modal-body">
                 <div class="d-flex justify-content-around mb-3 text-center">
-        					<input type="text" class="form-control" placeholder="Bucket Name" [(ngModel)]="editBucketName" name="editBucketName"  aria-label="bucketName" aria-describedby="basic-addon1" disabled>
+        					<input type="text" class="form-control" placeholder="Имя папки" [(ngModel)]="editBucketName" name="editBucketName"  aria-label="bucketName" aria-describedby="basic-addon1" disabled>
         				</div>
-                <div class="separator pointer">Policy</div>
+                <div class="separator pointer">Парвила</div>
                 <div class="d-flex justify-content-around p-1 text-center">
-                  <select class="browser-default custom-select" (change)="updatePolicyType()" [(ngModel)]="newBucketPolicy" title="Select policy type">
+                  <select class="browser-default custom-select" (change)="updatePolicyType()" [(ngModel)]="newBucketPolicy" title="Выбор типа прав">
                     <option [value]="pType" *ngFor="let pType of policyTypes">{{pType}}</option>
                   </select>
                 </div>
@@ -392,8 +392,8 @@
                 </div>
                 <br/>
                 <div class="mb-3" *ngIf="serviceInfo?.services?.vault?.status != 'disabled'">
-                  <div class="separator pointer">Encryption</div>
-                  <select class="browser-default custom-select" [(ngModel)]="updateBucketEncryptionObj" title="Select encryption type" (change)="updateEncryptionType($event)">
+                  <div class="separator pointer">Шифрование</div>
+                  <select class="browser-default custom-select" [(ngModel)]="updateBucketEncryptionObj" title="Выбор типа шифрования" (change)="updateEncryptionType($event)">
                     <option value="" disabled selected>Select encryption</option>
                     <option [value]="encType" *ngFor="let encType of encryptionTypes">{{encType}}</option>
                   </select><br/><br/>
@@ -401,43 +401,44 @@
           					<input type="text" class="form-control" placeholder="Master Key ID" [(ngModel)]="newBucketMasterKeyID" name="newBucketMasterKeyID"  aria-label="bucketName" aria-describedby="basic-addon1">
           				</div>
                 </div>
-                <div class="separator pointer">Tags</div>
+                <div class="separator pointer">Метки</div>
                 <div class="d-flex justify-content-around mb-3 text-center">
                   <div class="form-row">
                       <div class="col">
-                          <input type="text" id="updateBucketTagName" [(ngModel)]="newBucketTagName" class="form-control" placeholder="Tag name">
+                          <input type="text" id="updateBucketTagName" [(ngModel)]="newBucketTagName" class="form-control" placeholder="Имя метки
+">
                       </div>
                       <div class="col">
-                          <input type="text" id="updateBucketTagValue" [(ngModel)]="newBucketTagValue" class="form-control" placeholder="Tag value">
+                          <input type="text" id="updateBucketTagValue" [(ngModel)]="newBucketTagValue" class="form-control" placeholder="Значение метки">
                       </div>
                       <div class="col-2">
-                          <button class="btn btn-sm blue-gradient button-fix" title="add more tags" (click)="createFormAddTag()"><i class="fas fa-plus"></i></button>
+                          <button class="btn btn-sm blue-gradient button-fix" title="добавить метки" (click)="createFormAddTag()"><i class="fas fa-plus"></i></button>
                       </div>
                   </div>
         				</div>
                 <section id="listTags" *ngIf="newBucketTagsList">
-                  <span class="badge badge-primary ml-2"  mdbTooltip="click to delete" *ngFor="let tag of objectKeys(newBucketTagsList)" (click)="createFormRemoveTag(tag)">{{tag}}: {{newBucketTagsList[tag]}}</span>
+                  <span class="badge badge-primary ml-2"  mdbTooltip="удалить" *ngFor="let tag of objectKeys(newBucketTagsList)" (click)="createFormRemoveTag(tag)">{{tag}}: {{newBucketTagsList[tag]}}</span>
                 </section>
                 <br/>
-                <div class="separator">Quota section</div>
+                <div class="separator">Квота</div>
                 <span>
                   <div class="d-flex justify-content-around p-1 text-center">
-                    <select class="browser-default custom-select" (change)="updateQuotaType()" [(ngModel)]="updateBucketQuotaObj.quotatype" title="Select quota type">
-                      <option value="" disabled selected>Select quota type</option>
+                    <select class="browser-default custom-select" (change)="updateQuotaType()" [(ngModel)]="updateBucketQuotaObj.quotatype" title="Выбрать тип квоты">
+                      <option value="" disabled selected>Выбрать тип квоты</option>
                       <option [value]="qType" *ngFor="let qType of quotaTypes">{{qType}}</option>
                     </select>
     							</div>
 
                   <div class="alert alert-info" role="alert">
                     <mdb-icon fas icon="info-circle" class="mr-1"></mdb-icon>
-                    In <b>"fifo"</b> mode - old data automatically will be removed when you reach quota limit. <br/>
-                    In <b>"hard"</b> mode - you can't add new data to bucket if quota limit reached.
+                    В режиме <b>"fifo"</b> старые данные автоматически удаляются при достижении лимита квоты. <br/>
+                    В режиме <b>"hard"</b> вы не можете добавлять новые данные в корзину, если достигнут предел квоты.
                   </div>
 
                   <div class="input-group d-flex justify-content-around mb-3 text-center">
-          					<input type="text" class="form-control" (change)="updateQuota()" placeholder="Quota in bytes" [(ngModel)]="updateBucketQuotaObj.quota" name="updateBucketQuota"  aria-label="bucketQuota" aria-describedby="basic-addon1" autofocus>
+          					<input type="text" class="form-control" (change)="updateQuota()" placeholder="Квота в байтах" [(ngModel)]="updateBucketQuotaObj.quota" name="updateBucketQuota"  aria-label="bucketQuota" aria-describedby="basic-addon1" autofocus>
                     <div class="input-group-append">
-                      <div class="input-group-text">Bytes</div>
+                      <div class="input-group-text">Байты</div>
                     </div>
                   </div>
                 </span>
@@ -465,7 +466,7 @@
                 </div>
             </div>
             <div class="modal-footer justify-content-center">
-                <button type="button" mdbBtn gradient="peach" rounded="true" class="relative waves-light" mdbWavesEffect (click)="updateBucket(updateBucketQuotaObj.quotatype,updateBucketQuotaObj.quota); editBucketModal.hide(); resetUpdateForm();">Update</button>
+                <button type="button" mdbBtn gradient="peach" rounded="true" class="relative waves-light" mdbWavesEffect (click)="updateBucket(updateBucketQuotaObj.quotatype,updateBucketQuotaObj.quota); editBucketModal.hide(); resetUpdateForm();">Обновить</button>
             </div>
         </div>
     </div >

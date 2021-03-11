@@ -43,7 +43,7 @@ export class PoliciesComponent implements OnInit {
   dropdownConditionKeySettings = {};
 
   advancedInterface = false;
-  advancedInterfaceLabel = "advanced"
+  advancedInterfaceLabel = "расширенный"
 
   newPolicy = {
   	name:"",
@@ -98,18 +98,71 @@ export class PoliciesComponent implements OnInit {
   	this.getPolicies()
 
 
-  	this.dropdownActionList = [
-      {"id":1,"itemName":"s3:AbortMultipartUpload"},
-      {"id":2,"itemName":"s3:CreateBucket"},
-      {"id":3,"itemName":"s3:DeleteBucket"},
-      {"id":4,"itemName":"s3:ForceDeleteBucket"},
-      {"id":5,"itemName":"s3:DeleteBucketPolicy"},
-      {"id":6,"itemName":"s3:DeleteObject"},
-      {"id":7,"itemName":"s3:GetBucketLocation"},
-      {"id":8,"itemName":"s3:GetBucketNotification"},
-      {"id":9,"itemName":"s3:GetBucketPolicy"},
-      {"id":10,"itemName":"s3:GetObject"},
-      {"id":11,"itemName":"s3:HeadBucket"},
+  	// this.dropdownActionList = [
+    //   {"id":1,"itemName":"s3:AbortMultipartUpload"},
+    //   {"id":2,"itemName":"s3:CreateBucket"},
+    //   {"id":3,"itemName":"s3:DeleteBucket"},
+    //   {"id":4,"itemName":"s3:ForceDeleteBucket"},
+    //   {"id":5,"itemName":"s3:DeleteBucketPolicy"},
+    //   {"id":6,"itemName":"s3:DeleteObject"},
+    //   {"id":7,"itemName":"s3:GetBucketLocation"},
+    //   {"id":8,"itemName":"s3:GetBucketNotification"},
+    //   {"id":9,"itemName":"s3:GetBucketPolicy"},
+    //   {"id":10,"itemName":"s3:GetObject"},
+    //   {"id":11,"itemName":"s3:HeadBucket"},
+    //   {"id":12,"itemName":"s3:ListAllMyBuckets"},
+    //   {"id":13,"itemName":"s3:ListBucket"},
+    //   {"id":14,"itemName":"s3:ListBucketVersions"},
+    //   {"id":15,"itemName":"s3:ListBucketMultipartUploads"},
+    //   {"id":16,"itemName":"s3:ListenNotification"},
+    //   {"id":17,"itemName":"s3:ListenBucketNotification"},
+    //   {"id":18,"itemName":"s3:ListMultipartUploadParts"},
+    //   {"id":19,"itemName":"s3:PutLifecycleConfiguration"},
+    //   {"id":20,"itemName":"s3:GetLifecycleConfiguration"},
+    //   {"id":21,"itemName":"s3:PutBucketNotification"},
+    //   {"id":22,"itemName":"s3:PutBucketPolicy"},
+    //   {"id":23,"itemName":"s3:PutObject"},
+    //   {"id":24,"itemName":"s3:DeleteObjectVersion"},
+    //   {"id":25,"itemName":"s3:DeleteObjectVersionTagging"},
+    //   {"id":26,"itemName":"s3:GetObjectVersion"},
+    //   {"id":27,"itemName":"s3:GetObjectVersionTagging"},
+    //   {"id":28,"itemName":"s3:PutObjectVersionTagging"},
+    //   {"id":29,"itemName":"s3:BypassGovernanceRetention"},
+    //   {"id":30,"itemName":"s3:PutObjectRetention"},
+    //   {"id":31,"itemName":"s3:GetObjectRetention"},
+    //   {"id":32,"itemName":"s3:GetObjectLegalHold"},
+    //   {"id":33,"itemName":"s3:PutObjectLegalHold"},
+    //   {"id":34,"itemName":"s3:GetBucketObjectLockConfiguration"},
+    //   {"id":35,"itemName":"s3:PutBucketObjectLockConfiguration"},
+    //   {"id":36,"itemName":"s3:GetBucketTagging"},
+    //   {"id":37,"itemName":"s3:PutBucketTagging"},
+    //   {"id":38,"itemName":"s3:GetObjectTagging"},
+    //   {"id":39,"itemName":"s3:PutObjectTagging"},
+    //   {"id":40,"itemName":"s3:DeleteObjectTagging"},
+    //   {"id":41,"itemName":"s3:PutEncryptionConfiguration"},
+    //   {"id":42,"itemName":"s3:GetEncryptionConfiguration"},
+    //   {"id":43,"itemName":"s3:PutBucketVersioning"},
+    //   {"id":44,"itemName":"s3:GetBucketVersioning"},
+    //   {"id":45,"itemName":"s3:GetReplicationConfiguration"},
+    //   {"id":46,"itemName":"s3:PutReplicationConfiguration"},
+    //   {"id":47,"itemName":"s3:ReplicateObject"},
+    //   {"id":48,"itemName":"s3:ReplicateDelete"},
+    //   {"id":49,"itemName":"s3:ReplicateTags"},
+    //   {"id":50,"itemName":"s3:GetObjectVersionForReplication"}
+    // ];
+
+    this.dropdownActionList = [
+      {"id":1,"itemName":"s3:ПрерватьСоставную загрузку"},
+      {"id":2,"itemName":"s3:СоздатПапку"},
+      {"id":3,"itemName":"s3:УдалитьПапку"},
+      {"id":4,"itemName":"s3:ПринудительноУдалитьПапку"},
+      {"id":5,"itemName":"s3:УдалитьПравилаПапки"},
+      {"id":6,"itemName":"s3:УдалитьОбъект"},
+      {"id":7,"itemName":"s3:ПолучитьРасположениеПапки"},
+      {"id":8,"itemName":"s3:ПолучитьУведомлениеПапки"},
+      {"id":9,"itemName":"s3:ПолучитьПравилаПапки"},
+      {"id":10,"itemName":"s3:ПолучитьОбъект"},
+      {"id":11,"itemName":"s3:ГлавнаяПапка"},
       {"id":12,"itemName":"s3:ListAllMyBuckets"},
       {"id":13,"itemName":"s3:ListBucket"},
       {"id":14,"itemName":"s3:ListBucketVersions"},
@@ -151,11 +204,12 @@ export class PoliciesComponent implements OnInit {
       {"id":50,"itemName":"s3:GetObjectVersionForReplication"}
     ];
 
+
     this.dropdownActionSettings = {
   		singleSelection: false,
-  		text:"Select Actions",
-  		selectAllText:'Select All',
-  		unSelectAllText:'UnSelect All',
+  		text:"Выбор действий",
+  		selectAllText:'Выбрать все',
+  		unSelectAllText:'Снять все выделения',
   		enableSearchFilter: true
 	  };
 
@@ -339,10 +393,10 @@ export class PoliciesComponent implements OnInit {
   switchAdvanced(){
     if(this.advancedInterface){
       this.advancedInterface = false;
-      this.advancedInterfaceLabel = "Advanced"
+      this.advancedInterfaceLabel = "Расширенный"
     }else{
       this.advancedInterface = true;
-      this.advancedInterfaceLabel = "Basic"
+      this.advancedInterfaceLabel = "Базовый"
     }
   }
 
@@ -678,17 +732,17 @@ export class PoliciesComponent implements OnInit {
   private isEditMode(state){
     this.modalEditMode = state;
     if(state){
-      this.modalCreateEditTitle = "Edit policy"
-      this.modalCreateEditButtonText = "Update"
+      this.modalCreateEditTitle = "Редактирование правил"
+      this.modalCreateEditButtonText = "Обновить"
     }else{
-      this.modalCreateEditTitle = "Build up new policy"
-      this.modalCreateEditButtonText = "Create"
+      this.modalCreateEditTitle = "Создание новых правил"
+      this.modalCreateEditButtonText = "Создать"
     }
   }
 
   private isNowCopyMode(){
-    this.modalCreateEditTitle = "Copy policy"
-    this.modalCreateEditButtonText = "Copy"
+    this.modalCreateEditTitle = "Копирование правил"
+    this.modalCreateEditButtonText = "Копировать"
   }
 
   private updatePolicyPrepare(policy){

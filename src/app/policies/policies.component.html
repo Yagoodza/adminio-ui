@@ -1,16 +1,16 @@
 <div class="container" style="padding-top: 30px;">
 	<div class="row">
 		<div class="col-6 col-md-6">
-		    <h1>Policies</h1>
+		    <h1>Правила</h1>
 		</div>
 		<div class="col-md-6 col-6 align-right">
 			<div class="btn-group" role="group">
 				<button type="button" mdbBtn  gradient="purple" rounded="true" class="relative waves-light" mdbWavesEffect rounded="true" data-toggle="modal" data-target="#uploadPolicy" (click)="this.resetUploadForm(); uploadModal.show()" mdbWavesEffect>
-					<mdb-icon fas icon="upload" class="mr-1"></mdb-icon>Upload policy
+					<mdb-icon fas icon="upload" class="mr-1"></mdb-icon>Загрузить правила
 				</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button type="button" mdbBtn  gradient="aqua" rounded="true" class="relative waves-light" mdbWavesEffect rounded="true" data-toggle="modal" data-target="#addPolicy" (click)="isEditMode(false); resetPloicyForm(true); prepareNewPolicyRaw(); addPolicyModal.show()" mdbWavesEffect>
-					<mdb-icon fas icon="plus" class="mr-1"></mdb-icon>Build policy
+					<mdb-icon fas icon="plus" class="mr-1"></mdb-icon>Создать правила
 				</button>
 			</div>
 		</div>
@@ -20,15 +20,15 @@
 			<div class="md-form">
 			  <!-- <input type="text" class="form-control" id="search" mdbInput> -->
 			  <input type="text" [(ngModel)]="searchText" (ngModelChange)="searchItems()" class="form-control" id="search" mdbInput>
-			  <label for="search">Search</label>
+			  <label for="search">Поиск</label>
 			</div>
 		</div>
 	</div>
 	<table mdbTable calss="table"  #tablePolicies="mdbTable" >
 		<thead class="thead-light">
 			<tr>
-			  <th>Name</th>
-			  <th>Action</th>
+			  <th>Имя</th>
+			  <th>Действие</th>
 			  <th>Principal</th>
 			  <th>Effect</th>
 			  <th>Resource</th>
@@ -140,13 +140,13 @@
                 <button type="button" class="close pull-right" aria-label="Close" (click)="uploadModal.hide()">
                     <span aria-hidden="true">×</span>
                 </button>
-                <h4 class="modal-title w-100" id="myModalLabel">Upload Policy</h4>
+                <h4 class="modal-title w-100" id="myModalLabel">Загрузка правил</h4>
             </div>
             <div class="modal-body">
 							<div class="row">
 								<div class="col-md-12 ml-auto">
 									<div class="d-flex justify-content-around p-1 mb-3 text-center">
-										<input type="text" class="form-control" placeholder="Policy Name" [(ngModel)]="uploadPolicyName" name="uploadPolicyName"  aria-label="policyName" aria-describedby="basic-addon1">
+										<input type="text" class="form-control" placeholder="Имя правила" [(ngModel)]="uploadPolicyName" name="uploadPolicyName"  aria-label="policyName" aria-describedby="basic-addon1">
 									</div>
 									<div class="d-flex justify-content-around p-1 mb-3 text-center">
 										<div class="custom-file">
@@ -197,7 +197,7 @@
                 <button type="button" class="close pull-right" aria-label="Close" (click)="addPolicyModal.hide()">
                     <span aria-hidden="true">×</span>
                 </button>
-                <span><h4 class="modal-title w-100" id="myModalLabel">{{modalCreateEditTitle}}</h4>Switch to <button type="button" mdbBtn color="link" class="link-button" (click)="switchAdvanced()">{{advancedInterfaceLabel}}</button> interface </span>
+                <span><h4 class="modal-title w-100" id="myModalLabel">{{modalCreateEditTitle}}</h4>Переключить на <button type="button" mdbBtn color="link" class="link-button" (click)="switchAdvanced()">{{advancedInterfaceLabel}}</button> интерфейс </span>
             </div>
             <div class="modal-body">
             	<!-- <form class="text-center" name="newPolicy"  > -->
@@ -211,7 +211,7 @@
 
 
 					    <div class="d-flex justify-content-around p-1 mb-3 text-center">
-								<input type="text" class="form-control" placeholder="Policy Name" [(ngModel)]="newPolicy.name" name="newPolicyName"  aria-label="policyName" aria-describedby="basic-addon1">
+								<input type="text" class="form-control" placeholder="Имя правила" [(ngModel)]="newPolicy.name" name="newPolicyName"  aria-label="policyName" aria-describedby="basic-addon1">
 							</div>
 
 							<div class="d-flex justify-content-around p-1 text-center">
